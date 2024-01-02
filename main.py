@@ -33,7 +33,10 @@ def get_question(message):
     print(message.text)
     print(message.chat)
     if message.chat.id != MY_CHAT_ID:
-        bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat}"))
+        if message.chat.photo == None:
+            bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat}"))
+        else:
+            print("photo")
     bot.reply_to(message, generate_response(message.text))
 
 bot.polling()
