@@ -12,9 +12,12 @@ MY_CHAT_ID = 156956400
 
 
 
-def generate_response(prompt):
+def generate_response(prompt, message):
     response = model.generate_content(prompt)
     res = response.text
+    if message.chat.id != MY_CHAT_ID:
+        bot.reply_to(message, f"answer:   {res}")
+
     return res
 
 @bot.message_handler(commands=['start'])
@@ -39,7 +42,7 @@ def get_question(message):
         if message.chat.id != MY_CHAT_ID:
             bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
             bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
-        bot.reply_to(message, generate_response(message.text))
+        bot.reply_to(message, generate_response(message.text, message))
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
 @bot.message_handler(content_types=['photo'])
