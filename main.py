@@ -37,9 +37,8 @@ def get_question(message):
     if message.content_type == "text":
         print(message.text)
         if message.chat.id != MY_CHAT_ID:
-            bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat}"))
-            bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.id}"))
-            bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.username} {message.first_name} {message.last_name}"))
+            bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
+            bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
         bot.reply_to(message, generate_response(message.text))
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
@@ -48,7 +47,8 @@ def photos(message):
     print("photo")
     print(message.json["photo"][-1]["file_id"])
     raw = message.json["photo"][-1]["file_id"]
-    bot.send_photo(MY_CHAT_ID, raw, message.from_user)
+    if message.chat.id != MY_CHAT_ID:
+        bot.send_photo(MY_CHAT_ID, raw, message.from_user)
     # path = raw + ".jpg"
     # file_info = bot.get_file(raw)
     # downloaded_file = bot.download_file(file_info.file_path)
