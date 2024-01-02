@@ -42,5 +42,9 @@ def get_question(message):
             print("photo")
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
-    print(message.text)
+    # frequency = 1000  # Set Frequency To 2500 Hertz
+    # duration = 250  # Set Duration To 1000 ms == 1 second
+    # winsound.Beep(frequency, duration)
+    send_req = bot.send_message(message.chat.id, "Send Your Question")
+    bot.register_next_step_handler(send_req, get_question)
 bot.polling()
