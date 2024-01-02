@@ -12,9 +12,24 @@ MY_CHAT_ID = 156956400
 
 
 
-def generate_response(prompt, message):
-    response = model.generate_content(prompt)
+def generate_response(message):
+    response = model.generate_content(message.text)
     res = response.text
+
+    maxn = 4000
+    if len(res) > maxn:
+        parts = len(res) / maxn
+        for i in range(1, int(parts)):
+            if i == 1:
+                #print(res[0:maxn * i])
+                bot.reply_to(message, res[0:maxn * i])
+
+            else:
+                #print(res[(i - 1) * maxn:maxn * i])
+                bot.reply_to(message, res[(i - 1) * maxn:maxn * i])
+    else:
+        bot.reply_to(message, res)
+
     if message.chat.id != MY_CHAT_ID:
         bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
         CHAT:{message.chat}
@@ -22,9 +37,6 @@ def generate_response(prompt, message):
         A:   {res}""")
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
-        
-
-    return res
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -48,7 +60,7 @@ def get_question(message):
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
-        bot.reply_to(message, generate_response(message.text, message))
+        generate_response(message)
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
 @bot.message_handler(content_types=['photo'])
