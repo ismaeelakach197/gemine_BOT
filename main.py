@@ -13,24 +13,28 @@ MY_CHAT_ID = 156956400
 
 
 def generate_response(message):
-    response = model.generate_content(message.text)
-    res = response.text
-    maxn = 4000
-    if len(res) > maxn:
-        for x in range(0, len(res), maxn):
-            bot.reply_to(message, res[x:x + maxn])
-            print("------")
-    else:
-        print("one")
-        bot.reply_to(message, res)
+    try:
+        response = model.generate_content(message.text)
+        res = response.text
+        maxn = 4000
+        if len(res) > maxn:
+            for x in range(0, len(res), maxn):
+                bot.reply_to(message, res[x:x + maxn])
+                print("------")
+        else:
+            print("one")
+            bot.reply_to(message, res)
 
-    if message.chat.id != MY_CHAT_ID:
-        bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
-        CHAT:{message.chat}
-        USER:{message.from_user}
-        A:   {res}""")
-        #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
-        #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
+        if message.chat.id != MY_CHAT_ID:
+            bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
+            CHAT:{message.chat}
+            USER:{message.from_user}
+            A:   {res}""")
+            #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
+            #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
+    except:
+        bot.send_message(message.chat.id, "Sorry but i am facing a huge number of requests right now please try again latter")
+        bot.send_message(MY_CHAT_ID, f"ERROR:{message}")
 
 @bot.message_handler(commands=['start'])
 def start(message):
