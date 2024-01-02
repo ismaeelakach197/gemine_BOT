@@ -26,12 +26,12 @@ def generate_response(message):
         if len(res) > maxn:
             for x in range(0, len(res), maxn):
                 bot.reply_to(message, res[x:x + maxn])
-                add(message, res[x:x + maxn])
+                #add(message, res[x:x + maxn])
                 print("------")
         else:
             print("one")
             bot.reply_to(message, res)
-            add(message, res)
+            #add(message, res)
 
         if message.chat.id != MY_CHAT_ID:
             bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
