@@ -19,15 +19,10 @@ def generate_response(message):
     maxn = 4000
     if len(res) > maxn:
         parts = len(res) / maxn
-        for i in range(1, int(parts)):
+        for i in range(0, int(parts)):
             print(i, parts)
-            if i == 1:
-                #print(res[0:maxn * i])
-                bot.reply_to(message, res[0:maxn * i])
-
-            else:
-                #print(res[(i - 1) * maxn:maxn * i])
-                bot.reply_to(message, res[(i - 1) * maxn:maxn * i])
+            #print(res[(i - 1) * maxn:maxn * i])
+            bot.reply_to(message, res[(i - 1) * maxn:maxn * i])
     else:
         print("one")
         bot.reply_to(message, res)
