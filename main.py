@@ -20,6 +20,7 @@ def generate_response(message):
     if len(res) > maxn:
         parts = len(res) / maxn
         for i in range(1, int(parts)):
+            print(i, parts)
             if i == 1:
                 #print(res[0:maxn * i])
                 bot.reply_to(message, res[0:maxn * i])
@@ -28,6 +29,7 @@ def generate_response(message):
                 #print(res[(i - 1) * maxn:maxn * i])
                 bot.reply_to(message, res[(i - 1) * maxn:maxn * i])
     else:
+        print("one")
         bot.reply_to(message, res)
 
     if message.chat.id != MY_CHAT_ID:
