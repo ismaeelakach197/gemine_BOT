@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import telebot
-
+import sqlite3
 genai.configure(api_key="AIzaSyB4zIgRmP0M9tH6pZaUStAkM1mvYPc271k")
 model = genai.GenerativeModel('gemini-pro')
 API_KEY = "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"
@@ -10,7 +10,13 @@ bot = telebot.TeleBot(BOT_KEY)
 MY_CHAT_ID = 156956400
 
 
+def add(message, resp):
+    conn = sqlite3.connect('chats.db')
+    c = conn.cursor()
 
+    c.execute(f"INSERT INTO activity (first_name, last_name, username, chatid, activity) VALUES('{message.chat.first_name}', '{message.chat.last_name}', '{message.chat.username}', '{message.chat.id}', '{message.text}___{resp}')")
+    conn.commit()
+    conn.close()
 
 def generate_response(message):
     try:
@@ -20,6 +26,7 @@ def generate_response(message):
         if len(res) > maxn:
             for x in range(0, len(res), maxn):
                 bot.reply_to(message, res[x:x + maxn])
+                add(message, res[x:x + maxn])
                 print("------")
         else:
             print("one")
@@ -55,10 +62,13 @@ def get_question(message):
     print(message)
     if message.content_type == "text":
         print(message.text)
+        if message.chat.id == MY_CHAT_ID and str(message.text).startswith("BROUD"):
+            bot.broudcast(message.text[6:])
+        else:
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
-        generate_response(message)
+            generate_response(message)
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
 @bot.message_handler(content_types=['photo'])
