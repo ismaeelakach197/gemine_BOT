@@ -16,7 +16,13 @@ def generate_response(prompt, message):
     response = model.generate_content(prompt)
     res = response.text
     if message.chat.id != MY_CHAT_ID:
-        bot.reply_to(message, f"answer:   {res}")
+        bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
+        CHAT:{message.chat}
+        USER:{message.from_user}
+        A:   {res}""")
+        #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
+        #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
+        
 
     return res
 
@@ -39,16 +45,15 @@ def get_question(message):
     print(message)
     if message.content_type == "text":
         print(message.text)
-        if message.chat.id != MY_CHAT_ID:
-            bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
-            bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
+        # if message.chat.id != MY_CHAT_ID:
+        #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
+        #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
         bot.reply_to(message, generate_response(message.text, message))
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
 @bot.message_handler(content_types=['photo'])
 def photos(message):
     print("photo")
-    print(message.json["photo"][-1]["file_id"])
     raw = message.json["photo"][-1]["file_id"]
     if message.chat.id != MY_CHAT_ID:
         bot.send_photo(MY_CHAT_ID, raw, message.from_user)
