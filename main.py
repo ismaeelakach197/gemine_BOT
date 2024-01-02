@@ -44,7 +44,7 @@ def get_question(message):
 @bot.message_handler(content_types=['photo'])
 def photos(message):
     print("photo")
-    print(message.json["photo"][-1].file_id)
+    print(message.json["photo"][-1]["file_id"])
 # def echo_message(message):
 #     # frequency = 1000  # Set Frequency To 2500 Hertz
 #     # duration = 250  # Set Duration To 1000 ms == 1 second
