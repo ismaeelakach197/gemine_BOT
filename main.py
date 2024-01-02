@@ -30,13 +30,13 @@ def ask(message):
     bot.register_next_step_handler(send_req, get_question)
 
 def get_question(message):
-    print(message.text)
     print(message.chat)
     if message.chat.id != MY_CHAT_ID:
         if message.chat.photo == None:
+            print(message.text)
             bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat}"))
+            bot.reply_to(message, generate_response(message.text))
         else:
             print("photo")
-    bot.reply_to(message, generate_response(message.text))
 
 bot.polling()
