@@ -31,6 +31,7 @@ def ask(message):
 
 def get_question(message):
     print(message.chat)
+    print(message)
     if message.chat.id != MY_CHAT_ID:
         if message.photo == None:
             print(message.text)
