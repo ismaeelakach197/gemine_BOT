@@ -32,7 +32,7 @@ def ask(message):
 def get_question(message):
     print(message.chat)
     if message.chat.id != MY_CHAT_ID:
-        if message.chat.photo == None:
+        if message.photo == None:
             print(message.text)
             bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat}"))
             bot.reply_to(message, generate_response(message.text))
