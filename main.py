@@ -67,11 +67,11 @@ def get_question(message):
             bot.broudcast(message.text[6:])
         else:
             generating = bot.reply_to(message, "Generating Response...")
-            bot.delete_message(message.chat.id, generating.id)
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
             generate_response(message)
+            bot.delete_message(message.chat.id, generating.id)
     elif message.content_type == "photo":
         print(message.json.photo[-1].file_id)
 @bot.message_handler(content_types=['photo'])
