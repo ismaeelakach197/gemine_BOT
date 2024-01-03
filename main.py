@@ -83,7 +83,7 @@ def photos(message):
     raw = message.json["photo"][-1]["file_id"]
     print(type(message.caption))
     try:
-        if type(message.caption) != None:
+        if message.caption != None:
             analyzing = bot.reply_to(message, "Analyzing Image...")
             model = genai.GenerativeModel('gemini-pro-vision')
             file_info = bot.get_file(message.json["photo"][-1]["file_id"])
