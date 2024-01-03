@@ -1,6 +1,8 @@
 import google.generativeai as genai
 import telebot
 import sqlite3
+from pathlib import Path
+
 genai.configure(api_key="AIzaSyB4zIgRmP0M9tH6pZaUStAkM1mvYPc271k")
 model = genai.GenerativeModel('gemini-pro')
 API_KEY = "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"
@@ -80,7 +82,21 @@ def photos(message):
     print(message)
     raw = message.json["photo"][-1]["file_id"]
     if message.chat.id != MY_CHAT_ID:
-        bot.send_photo(MY_CHAT_ID, raw, message.from_user)
+        bot.send_photo(MY_CHAT_ID, raw, message.from_user, caption=message["caption"])
+    if len(message["caption"]) > 0:
+        model = genai.GenerativeModel('gemini-pro-vision')
+        file_info = bot.get_file(message.json["photo"][-1]["file_id"])
+        downloaded_file = bot.download_file(file_info.file_path)
+        cookie_picture = {
+            'mime_type': 'image/png',
+            'data': downloaded_file
+        }
+        prompt = message["caption"]
+
+        response = model.generate_content(
+            contents=[prompt, cookie_picture]
+        )
+        print(response.text)
     # path = raw + ".jpg"
     # file_info = bot.get_file(raw)
     # downloaded_file = bot.download_file(file_info.file_path)
