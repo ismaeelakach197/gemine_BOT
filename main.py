@@ -40,9 +40,9 @@ def generate_response(message):
             A:   {res}""")
             #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
             #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
-    except:
+    except NameError:
         bot.send_message(message.chat.id, "Sorry but i am facing a huge number of requests right now please try again latter")
-        bot.send_message(MY_CHAT_ID, f"ERROR:{message}")
+        bot.send_message(MY_CHAT_ID, f"ERROR:{message} ERRORTYPE={NameError}")
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -66,7 +66,8 @@ def get_question(message):
         if message.chat.id == MY_CHAT_ID and str(message.text).startswith("BROUD"):
             bot.broudcast(message.text[6:])
         else:
-            bot.reply_to(message, "Generating Response...")
+            generating = bot.reply_to(message, "Generating Response...")
+            bot.delete_message(message.chat.id, generating.id)
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
