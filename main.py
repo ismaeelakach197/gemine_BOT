@@ -81,6 +81,7 @@ def photos(message):
     print("photo")
     print(message)
     raw = message.json["photo"][-1]["file_id"]
+    print(type(message.caption))
     try:
         if type(message.caption) != None:
             analyzing = bot.reply_to(message, "Analyzing Image...")
