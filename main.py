@@ -83,7 +83,7 @@ def photos(message):
     raw = message.json["photo"][-1]["file_id"]
     if message.chat.id != MY_CHAT_ID:
         bot.send_photo(MY_CHAT_ID, raw, message.from_user, caption=message["caption"])
-    if len(message["caption"]) > 0:
+    if len(message.caption) > 0:
         model = genai.GenerativeModel('gemini-pro-vision')
         file_info = bot.get_file(message.json["photo"][-1]["file_id"])
         downloaded_file = bot.download_file(file_info.file_path)
@@ -91,7 +91,7 @@ def photos(message):
             'mime_type': 'image/png',
             'data': downloaded_file
         }
-        prompt = message["caption"]
+        prompt = message.caption
 
         response = model.generate_content(
             contents=[prompt, cookie_picture]
