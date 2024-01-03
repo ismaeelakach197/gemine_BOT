@@ -43,7 +43,7 @@ def generate_response(message):
             #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
             #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
     except NameError:
-        bot.send_message(message.chat.id, "Sorry but i am facing a huge number of requests right now please try again latter")
+        bot.send_message(message.chat.id, "Sorry but i am facing a huge number of requests right now please try again later")
         bot.send_message(MY_CHAT_ID, f"ERROR:{message} ERRORTYPE={NameError}")
 
 @bot.message_handler(commands=['start'])
@@ -81,22 +81,30 @@ def photos(message):
     print("photo")
     print(message)
     raw = message.json["photo"][-1]["file_id"]
-    if message.chat.id != MY_CHAT_ID:
-        bot.send_photo(MY_CHAT_ID, raw, message.from_user, caption=message["caption"])
-    if len(message.caption) > 0:
-        model = genai.GenerativeModel('gemini-pro-vision')
-        file_info = bot.get_file(message.json["photo"][-1]["file_id"])
-        downloaded_file = bot.download_file(file_info.file_path)
-        cookie_picture = {
-            'mime_type': 'image/png',
-            'data': downloaded_file
-        }
-        prompt = message.caption
-
-        response = model.generate_content(
-            contents=[prompt, cookie_picture]
-        )
-        print(response.text)
+    try:
+        if len(message.caption) > 0:
+            analyzing = bot.reply_to(message, "Analyzing Image...")
+            model = genai.GenerativeModel('gemini-pro-vision')
+            file_info = bot.get_file(message.json["photo"][-1]["file_id"])
+            downloaded_file = bot.download_file(file_info.file_path)
+            cookie_picture = {
+                'mime_type': 'image/png',
+                'data': downloaded_file
+            }
+            prompt = message.caption
+            response = model.generate_content(
+                contents=[prompt, cookie_picture]
+            )
+            bot.delete_message(analyzing.chat.id, analyzing.id)
+            bot.reply_to(message, response.text)
+            if message.chat.id != MY_CHAT_ID:
+                bot.send_photo(MY_CHAT_ID, raw, message.from_user, caption=message.caption)
+                bot.send_message(MY_CHAT_ID, response.text)
+        else:
+            bot.reply_to(message, "Sorry but You Must Send Image With Caption!!!")
+    except NameError:
+        bot.send_message(message.chat.id,"Sorry but i am facing a huge number of requests right now please try again later")
+        bot.send_message(MY_CHAT_ID, f"ERROR:{message} ERRORTYPE={NameError}")
     # path = raw + ".jpg"
     # file_info = bot.get_file(raw)
     # downloaded_file = bot.download_file(file_info.file_path)
