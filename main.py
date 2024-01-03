@@ -77,6 +77,7 @@ def get_question(message):
 @bot.message_handler(content_types=['photo'])
 def photos(message):
     print("photo")
+    print(message)
     raw = message.json["photo"][-1]["file_id"]
     if message.chat.id != MY_CHAT_ID:
         bot.send_photo(MY_CHAT_ID, raw, message.from_user)
