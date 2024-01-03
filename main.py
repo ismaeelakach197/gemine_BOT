@@ -99,7 +99,7 @@ def photos(message):
             bot.delete_message(analyzing.chat.id, analyzing.id)
             bot.reply_to(message, response.text)
             if message.chat.id != MY_CHAT_ID:
-                bot.send_photo(MY_CHAT_ID, raw, message.from_user, caption=message.caption)
+                bot.send_photo(MY_CHAT_ID, raw, f"{message.from_user} caption={message.caption}")
                 bot.send_message(MY_CHAT_ID, response.text)
         else:
             bot.reply_to(message, "Sorry but You Must Send Image With Caption!!!")
