@@ -17,11 +17,15 @@ def add(message, resp):
     c = conn.cursor()
     spchars = ['\\', '/', ':', '*', "?", "'", "<", ">", "|"]
     newres = ""
-    for l in resp:
+    newtxt = ""
+    for l in str(resp):
         if l not in spchars:
             newres+=l
+    for e in str(message.text):
+        if e not in spchars:
+            newtxt += l
 
-    c.execute(f"INSERT INTO activity (first_name, last_name, username, chatid, activity) VALUES('{message.chat.first_name}', '{message.chat.last_name}', '{message.chat.username}', '{message.chat.id}', '{message.text}___{newres}')")
+    c.execute(f"INSERT INTO activity (first_name, last_name, username, chatid, activity) VALUES('{message.chat.first_name}', '{message.chat.last_name}', '{message.chat.username}', '{message.chat.id}', '{newtxt}___{newres}')")
     conn.commit()
     conn.close()
 
