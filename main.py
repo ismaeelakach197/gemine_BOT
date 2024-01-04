@@ -15,7 +15,7 @@ MY_CHAT_ID = 156956400
 def add(message, resp):
     conn = sqlite3.connect('chats.db')
     c = conn.cursor()
-    spchars = ['\\', '/', ':', '*', "?", "'", "<", ">", "|"]
+    spchars = ['\\', '/', ':', '*', "?", "'", "<", ">", "|", '"']
     newres = ""
     newtxt = ""
     for l in str(resp):
