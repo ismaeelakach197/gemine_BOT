@@ -4,6 +4,7 @@ import sqlite3
 from pathlib import Path
 
 genai.configure(api_key="AIzaSyB4zIgRmP0M9tH6pZaUStAkM1mvYPc271k")
+model = genai.GenerativeModel('gemini-pro')
 API_KEY = "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"
 BOT_KEY = "6059146214:AAH0t4S8tLcDL81HrUFnU4GIiwhbO8GraXU"
 types = telebot.types
@@ -21,25 +22,18 @@ def add(message, resp):
 
 def generate_response(message):
     try:
-        if str(message.text).startswith("generate image of"):
-            model = genai.GenerativeModel('gemini-pro-vision')
-            response = model.generate_content(message.text)
-        else:
-            model = genai.GenerativeModel('gemini-pro')
-            response = model.generate_content(message.text)
+        response = model.generate_content(message.text)
         res = response.text
         maxn = 4000
-        print(res)
-
         if len(res) > maxn:
             for x in range(0, len(res), maxn):
                 bot.reply_to(message, res[x:x + maxn])
-                #add(message, res[x:x + maxn])
+                add(message, res[x:x + maxn])
                 print("------")
         else:
             print("one")
             bot.reply_to(message, res)
-            #add(message, res)
+            add(message, res)
 
         if message.chat.id != MY_CHAT_ID:
             bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
@@ -74,7 +68,6 @@ def get_question(message):
         if message.chat.id == MY_CHAT_ID and str(message.text).startswith("BROUD"):
             bot.broudcast(message.text[6:])
         else:
-
             generating = bot.reply_to(message, "Generating Response...")
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
