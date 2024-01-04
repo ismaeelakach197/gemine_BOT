@@ -30,24 +30,24 @@ def generate_response(message):
         res = response.text
         maxn = 4000
         print(res)
-      
-            if len(res) > maxn:
-                for x in range(0, len(res), maxn):
-                    bot.reply_to(message, res[x:x + maxn])
-                    #add(message, res[x:x + maxn])
-                    print("------")
-            else:
-                print("one")
-                bot.reply_to(message, res)
-                #add(message, res)
-    
-            if message.chat.id != MY_CHAT_ID:
-                bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
-                CHAT:{message.chat}
-                USER:{message.from_user}
-                A:   {res}""")
-                #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
-                #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
+
+        if len(res) > maxn:
+            for x in range(0, len(res), maxn):
+                bot.reply_to(message, res[x:x + maxn])
+                #add(message, res[x:x + maxn])
+                print("------")
+        else:
+            print("one")
+            bot.reply_to(message, res)
+            #add(message, res)
+
+        if message.chat.id != MY_CHAT_ID:
+            bot.send_message(MY_CHAT_ID, f"""Q:{message.text}
+            CHAT:{message.chat}
+            USER:{message.from_user}
+            A:   {res}""")
+            #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
+            #     bot.send_message(MY_CHAT_ID, str(f"{message.text} {message.from_user}"))
     except NameError:
         bot.send_message(message.chat.id, "Sorry but i am facing a huge number of requests right now please try again later")
         bot.send_message(MY_CHAT_ID, f"ERROR:{message} ERRORTYPE={NameError}")
@@ -74,7 +74,7 @@ def get_question(message):
         if message.chat.id == MY_CHAT_ID and str(message.text).startswith("BROUD"):
             bot.broudcast(message.text[6:])
         else:
-          
+
             generating = bot.reply_to(message, "Generating Response...")
         # if message.chat.id != MY_CHAT_ID:
         #     bot.send_message(MY_CHAT_ID, str(f"{message.text}{message.chat.id}"))
