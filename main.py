@@ -15,8 +15,13 @@ MY_CHAT_ID = 156956400
 def add(message, resp):
     conn = sqlite3.connect('chats.db')
     c = conn.cursor()
+    spchars = ['\\', '/', ':', '*', "?", "'", "<", ">", "|"]
+    newres = ""
+    for l in resp:
+        if l not in spchars:
+            newres+=l
 
-    c.execute(f"INSERT INTO activity (first_name, last_name, username, chatid, activity) VALUES('{message.chat.first_name}', '{message.chat.last_name}', '{message.chat.username}', '{message.chat.id}', '{message.text}___{resp}')")
+    c.execute(f"INSERT INTO activity (first_name, last_name, username, chatid, activity) VALUES('{message.chat.first_name}', '{message.chat.last_name}', '{message.chat.username}', '{message.chat.id}', '{message.text}___{newres}')")
     conn.commit()
     conn.close()
 
