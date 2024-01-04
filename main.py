@@ -25,6 +25,7 @@ def generate_response(message):
         response = model.generate_content(message.text)
         res = response.text
         maxn = 4000
+        print(res)
         if len(res) > maxn:
             for x in range(0, len(res), maxn):
                 bot.reply_to(message, res[x:x + maxn])
